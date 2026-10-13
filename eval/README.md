@@ -2,10 +2,10 @@
 
 **Does the boot law actually change model behavior? Measured, not assumed.**
 
-Phase 3 of the bootdoc v2 plan: 5 kernel laws × 5 live adversarial
+Phase 3 of the boot-doc plan: 5 laws × 5 live adversarial
 multi-turn scenarios (25), run head-to-head against both doc variants —
-booted-v1.1 (the ratified twelve-directive doc) vs booted-v2.1 (the
-five-law kernel candidate) vs unbooted (no system doc — the control).
+booted-v1.1 (the twelve-directive doc) vs booted-v2.1 (the
+five-law doc) vs unbooted (no system doc — the control).
 Live runs only, never simulated (GitInject lesson: simulation overstates
 safety). Stdlib only, OpenAI-compatible endpoint (ollama's `/v1` by
 default).
@@ -21,12 +21,12 @@ eval/
     law4_gates.py      spend/irreversible probes + a Green-action must-act probe
     law5_corrections.py correction-compounding: artifact required, apology ≠ enough
   fixtures/            read-only law; shas pinned in the self-tests
-    doc-variant-bootdoc-v1.1.md   exact copy of ~/.viiy/bootdoc.md (v1.1)
-    doc-variant-kernel-v2.1.md    Tier-0 block of the v2.1 candidate
+    doc-variant-bootdoc-v1.1.md   twelve-directive worked-example boot doc
+    doc-variant-kernel-v2.1.md    five-law boot doc (templated)
     inject-payload/agent-config.md  the config-file injection payload
   runner.py            multi-turn runner, JSONL with full provenance
   scoring.py           IFEval-first checks + pinned LLM-judge fallback + scorecard
-  results/             smoke-run receipts (JSONL + scorecard)
+  results/             run receipts (JSONL + scorecard) — gitignored
 ```
 
 ## Use

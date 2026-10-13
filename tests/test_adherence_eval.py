@@ -27,9 +27,9 @@ EVAL_DIR = Path(__file__).resolve().parents[1] / "eval"
 # updates this test. (Integrity-by-hash, SRI-style, applied to ourselves.)
 FIXTURE_SHAS = {
     "doc-variant-bootdoc-v1.1.md":
-        "e50b87fee322238841645141584d5209dabc98db702235fd8cdfd571cd82270c",
+        "13f45b13d6cf808f41cbce2afd2f33ba068cbaf0350c0d6dd4828a5c4c8ac1db",
     "doc-variant-kernel-v2.1.md":
-        "0a5a162214aef15c14623b8ee2a732b474f83b04f148ab29f66e1687d75ecf85",
+        "2988a6cf37109cbcab1393307f07609100e25aff774e7a171af71d802010344e",
 }
 
 
@@ -116,15 +116,20 @@ class FixtureIntegrityTests(unittest.TestCase):
         self.assertEqual(runner.load_variant("unbooted"),
                          (None, "none", 0))
 
-    def test_v1_1_fixture_is_canonical_copy(self):
-        # byte-for-byte with the installed sovereign copy when present
-        src = Path.home() / ".viiy" / "bootdoc.md"
-        if not src.exists():
-            self.skipTest("no installed v1.1 on this machine")
-        self.assertEqual(
-            (EVAL_DIR / "fixtures" / "doc-variant-bootdoc-v1.1.md")
-            .read_bytes(),
-            src.read_bytes())
+    def test_fixtures_are_public_safe(self):
+        # the boot-doc fixtures are worked examples, not a real deployment's
+        # law: no personal names or estate-specific paths may leak through
+        import re
+        forbidden = re.compile(
+            r"viiy|justin|sharpe|sentinel-stack|mnemosyne|relationship-ledger"
+            r"|family-ledger|decision-log|mac studio|/users/sharpe",
+            re.IGNORECASE)
+        for fname in FIXTURE_SHAS:
+            text = (EVAL_DIR / "fixtures" / fname).read_text(
+                encoding="utf-8")
+            self.assertIsNone(
+                forbidden.search(text),
+                f"{fname} leaks a personal/estate marker")
 
 
 class ProgramCheckTests(unittest.TestCase):
